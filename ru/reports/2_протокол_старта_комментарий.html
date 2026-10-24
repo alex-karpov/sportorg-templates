@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base_v2.html" %}
 
 {% block title %}Start List{% endblock %}
 
@@ -33,7 +33,7 @@
     racePreparation(race);
 
     function getStartListByGroup(group) {
-        var isRelay = group.__type ? group.__type === 3 : race.data.race_type === 3;
+        var isRelay = group.__type !== null ? group.__type === 3 : race.data.race_type === 3;
         var results = [];
         for (var _i = 0, _a = race.persons; _i < _a.length; _i++) {
             var person = _a[_i];
@@ -44,6 +44,7 @@
                     org: (person.organization && String(person.organization.name).slice(0, MAX_ORG_NAME)) || '',
                     qual: Qualification[person.qual],
                     bib: person.bib,
+                    bib_show: isRelay ? to_relay_bib(person.bib) : person.bib,
                     card_number: person.card_number,
                     year: person.birth_date ? (new Date(person.birth_date)).getFullYear() : '',
                     start: toHHMMSS(person.start_time),
@@ -93,10 +94,10 @@
         fields: [
             {key: 'index', title: '№', size: 4},
             {key: 'name', title: 'Фамилия, имя', size: 30},
-            {key: 'org', title: 'Коллектив', size: 20},
+            {key: 'org', title: 'Коллектив', size: 21},
             {key: 'year', title: 'ГР', size: 5},
             {key: 'qual', title: 'Разряд', size: 7},
-            {key: 'bib', title: 'Номер', size: 6},
+            {key: 'bib_show', title: 'Номер', size: 6},
             {key: 'card_number', title: 'Номер чипа', size: 11},
             {key: 'start', title: 'Время старта', size: 13},
 			{key: 'comment', title: 'Комментарий', size: 10}

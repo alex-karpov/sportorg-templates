@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base_v2.html" %}
 {% block title %}Results{% endblock %}
 {% block head %}{{ super() }}{% endblock %}
 {% block content %}
@@ -214,6 +214,24 @@
                 elem.index = index;
             })
         }
+        if (!isRelay) {
+            var prevResult = null;
+            var prevPlace = -1;
+            var dPlace = 1;
+            results.forEach(function (res) {
+                if (res.place > 0) {
+                    if (prevPlace !== res.place) {
+                        prevPlace = res.place;
+                        dPlace = 1;
+                    } else {
+                        res.place_show = "=" + prevPlace.toString().padStart(3, ' ');
+                        prevResult.place_show =  res.place_show;
+                        dPlace += 1;
+                    }
+                    prevResult = res;
+                }
+            });
+        }
         return results;
     }
 
@@ -257,7 +275,7 @@
         fields: [
             {key: 'index', title: '№', size: 3},
             {key: 'name', title: 'Фамилия, имя', size: 20},
-            {key: 'org', title: 'Коллектив', size: 20, active: false},
+            {key: 'org', title: 'Коллектив', size: 21, active: false},
             {key: 'year', title: 'ГР', size: 5, active: false},
             {key: 'qual', title: 'Разряд', size: 7, active: false},
             {key: 'bib', title: 'Номер', size: 6, active: false},
